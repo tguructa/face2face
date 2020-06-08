@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Platform } from 'ionic-angular';
 
 /**
  * Generated class for the ContactsPage page.
@@ -15,7 +15,36 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ContactsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  character;
+  contactList: any;
+  selectedRadioItem;
+
+  constructor(
+    public platform: Platform,
+    public params: NavParams,
+    public viewCtrl: ViewController
+  ) {
+    this.contactList = [{
+      FullName: "Thiru",
+      Mobile: "9841549605",
+      email: " "
+    },
+    {
+      FullName: "Sathish",
+      Mobile: "9840714623",
+      email: " "
+    }
+    ];
+    // this.character = characters[this.params.get('charNum')];
+  }
+
+  radioSelect(event) {
+    console.log("radioSelect",event.detail);
+    this.selectedRadioItem = event.detail;
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss(this.selectedRadioItem);
   }
 
   ionViewDidLoad() {

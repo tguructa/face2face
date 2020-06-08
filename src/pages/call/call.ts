@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, Platform, NavParams, ViewController, ModalController} from 'ionic-angular';
+import { IonicPage, NavController, Platform, NavParams, ViewController, ModalController } from 'ionic-angular';
 import { NativeAudio } from '@ionic-native/native-audio';
+import { ContactsPage } from "../contacts/contacts"
 
 
+//import "../../assets/apiRTC-latest.min.js";
 /**
  * Generated class for the CallPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
+declare var apiRTC: any;
 
 @IonicPage()
 @Component({
@@ -35,69 +38,194 @@ export class CallPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private nativeAudio: NativeAudio) {
   }
 
-  InitializeApiRTC() {
-    //todo
+  ionViewDidLoad() {
+
+    this.InitializeApiRTC("9841549605");
+
+    this.nativeAudio.preloadComplex('Tone1', 'assets/audio/tone.mp3', 1, 1, 0).then((succ) => {
+      console.log("suu", succ)
+    }, (err) => {
+      console.log("err", err)
+    });
+
+    console.log('ionViewDidLoad CallPage');
+  }
+
+  InitializeApiRTC(papiCCId) {
+
+    apiRTC.init({
+      apiKey: "b1c7afd3d2f5a7c7ffc1dda28e0d352a",
+      apiCCId: papiCCId,
+      onReady: (e) => {
+        this.sessionReadyHandler(e);
+      }
+    });
+
   }
 
   sessionReadyHandler(e) {
-    //todo
+    this.myCallId = apiRTC.session.apiCCId;
+    this.InitializeControls();
+    this.AddEventListeners();
+    this.InitializeWebRTCClient();
   }
 
   InitializeWebRTCClient() {
-    //todo
+    this.webRTCClient = apiRTC.session.createWebRTCClient({
+      status: "status" //Optionnal
+    });
+    /*    this.webRTCClient.setAllowMultipleCalls(true);
+        this.webRTCClient.setVideoBandwidth(300);
+        this.webRTCClient.setUserAcceptOnIncomingCall(true);*/
   }
 
   InitializeControls() {
-    //todo
+    this.showCall = true;
+    this.showAnswer = false;
+    this.showHangup = false;
+    this.showReject = false;
   }
 
   InitializeControlsForIncomingCall() {
-    //todo
+    this.showCall = false;
+    this.showAnswer = true;
+    this.showReject = true;
+    this.showHangup = true;
+    this.nativeAudio.loop('uniqueI1').then((succ) => {
+      console.log("succ", succ)
+    }, (err) => {
+      console.log("err", err)
+    });
+
   }
 
   InitializeControlsForHangup() {
-    //todo
+    this.showCall = true;
+    this.showAnswer = false;
+    this.showReject = false;
+    this.showHangup = false;
   }
 
   UpdateControlsOnAnswer() {
-    //todo
+    this.showAnswer = false;
+    this.showReject = false;
+    this.showHangup = true;
+    this.showCall = false;
   }
 
   UpdateControlsOnReject() {
-    //todo
+    this.showAnswer = false;
+    this.showReject = false;
+    this.showHangup = false;
+    this.showCall = true;
   }
 
   RemoveMediaElements(callId) {
-    //todo
+    this.webRTCClient.removeElementFromDiv('mini', 'miniElt-' + callId);
+    this.webRTCClient.removeElementFromDiv('remote', 'remoteElt-' + callId);
   }
 
   AddStreamInDiv(stream, callType, divId, mediaEltId, style, muted) {
-    //toto
+    let mediaElt = null;
+    let divElement = null;
+
+    if (callType === 'audio') {
+      mediaElt = document.createElement("audio");
+    } else {
+      mediaElt = document.createElement("video");
+    }
+
+    mediaElt.id = mediaEltId;
+    mediaElt.autoplay = true;
+    mediaElt.muted = muted;
+    mediaElt.style.width = style.width;
+    mediaElt.style.height = style.height;
+
+    divElement = document.getElementById(divId);
+    divElement.appendChild(mediaElt);
+
+    this.webRTCClient.attachMediaStream(mediaElt, stream);
   }
 
   AddEventListeners() {
-    //todo
+    apiRTC.addEventListener("userMediaSuccess", (e) => {
+      this.showStatus = true;
+      this.showMyVideo = true;
+
+      this.webRTCClient.addStreamInDiv(e.detail.stream, e.detail.callType, "mini", 'miniElt-' + e.detail.callId, {
+        width: "128px",
+        height: "96px"
+      }, true);
+
+    });
+
+    apiRTC.addEventListener("userMediaError", (e) => {
+      this.InitializeControlsForHangup();
+
+      this.status = this.status + "<br/> The following error has occurred <br/> " + e;
+    });
+
+    apiRTC.addEventListener("incomingCall", (e) => {
+      this.InitializeControlsForIncomingCall();
+      this.incomingCallId = e.detail.callId;
+    });
+
+    apiRTC.addEventListener("hangup", (e) => {
+      if (e.detail.lastEstablishedCall === true) {
+        this.InitializeControlsForHangup();
+      }
+      this.status = this.status + "<br/> The call has been hunged up due to the following reasons <br/> " + e.detail.reason;
+      this.RemoveMediaElements(e.detail.callId);
+    });
+
+    apiRTC.addEventListener("remoteStreamAdded", (e) => {
+      this.webRTCClient.addStreamInDiv(e.detail.stream, e.detail.callType, "remote", 'remoteElt-' + e.detail.callId, {
+        width: "300px",
+        height: "225px"
+      }, false);
+    });
+
+    apiRTC.addEventListener("webRTCClientCreated", (e) => {
+      console.log("webRTC Client Created");
+      this.webRTCClient.setAllowMultipleCalls(true);
+      this.webRTCClient.setVideoBandwidth(300);
+      this.webRTCClient.setUserAcceptOnIncomingCall(true);
+
+      /*      this.InitializeControls();
+            this.AddEventListeners();*/
+
+      //this.MakeCall("729278");
+    });
+
   }
 
   MakeCall(calleeId) {
-    ///todo
+    var callId = this.webRTCClient.call(calleeId);
+    if (callId != null) {
+      this.incomingCallId = callId;
+      this.showHangup = true;
+    }
   }
 
   HangUp() {
-    //todo
+    this.webRTCClient.hangUp(this.incomingCallId);
   }
 
   AnswerCall(incomingCallId) {
-    //todo
+    this.webRTCClient.acceptCall(incomingCallId);
+    this.nativeAudio.stop('uniqueI1').then(() => { }, () => { });
+
+    this.UpdateControlsOnAnswer();
   }
 
   RejectCall(incomingCallId) {
-    //todo
+    this.webRTCClient.refuseCall(incomingCallId);
+    this.UpdateControlsOnReject();
+    this.RemoveMediaElements(incomingCallId);
   }
 
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad CallPage');
-  }
+
+
 
 }
