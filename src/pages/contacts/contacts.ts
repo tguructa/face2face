@@ -38,13 +38,15 @@ export class ContactsPage {
     // this.character = characters[this.params.get('charNum')];
   }
 
-  radioSelect(event) {
-    console.log("radioSelect",event.detail);
-    this.selectedRadioItem = event.detail;
+  radioSelect(value) {
+    console.log("radioSelect",value);
+    this.selectedRadioItem = value;
+    this.dismiss();
   }
 
   dismiss() {
     this.viewCtrl.dismiss(this.selectedRadioItem);
+
   }
 
   ionViewDidLoad() {

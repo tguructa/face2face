@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, Platform, NavParams, ViewController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController,  NavParams,  ModalController } from 'ionic-angular';
 import { NativeAudio } from '@ionic-native/native-audio';
 import { ContactsPage } from "../contacts/contacts"
 
@@ -34,8 +34,20 @@ export class CallPage {
   myCallId;
   status;
   calleeId;
+ 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private nativeAudio: NativeAudio) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private nativeAudio: NativeAudio, public modalController: ModalController) {
+  }
+
+  async  openModal() {
+    const contactModel =  await this.modalController.create('ContactsPage');
+
+    contactModel.onDidDismiss(data=>{
+      console.log(data);
+      this.calleeId=data;
+    
+    });
+    return await contactModel.present();
   }
 
   ionViewDidLoad() {

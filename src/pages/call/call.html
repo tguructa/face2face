@@ -13,27 +13,32 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
+
+ <ion-list>
+    <ion-item>
+           <button  ion-button  color="secondary" block (click)='openModal()'>Contacts</button>
+      </ion-item>
       <ion-item>
-          <ion-label floating>Call ID:</ion-label>
+          <ion-label floating>Caller ID:</ion-label>
           <ion-input type="text" [(ngModel)]="calleeId"></ion-input>
       </ion-item>
-  </ion-list>
+  </ion-list> 
+
   <ion-grid>
       <ion-row>
           <ion-col>
-              <button *ngIf="showCall" ion-button block (click)='MakeCall(calleeId)'>Call</button>
+              <button *ngIf="showCall"  ion-button  small block (click)='MakeCall(calleeId)'>Call</button>
           </ion-col>
           <ion-col>
-              <button *ngIf="showHangup" ion-button block color="danger" (click)='HangUp()'>Hangup</button>
+              <button *ngIf="showHangup" ion-button small block color="danger" (click)='HangUp()'>Hangup</button>
           </ion-col>
       </ion-row>
       <ion-row>
           <ion-col>
-              <button *ngIf="showAnswer" ion-button block color="secondary" (click)='AnswerCall(incomingCallId)'>Answer</button>
+              <button *ngIf="showAnswer" ion-button small block color="secondary" (click)='AnswerCall(incomingCallId)'>Answer</button>
           </ion-col>
           <ion-col>
-              <button *ngIf="showReject" ion-button block color="danger">Reject</button>
+              <button *ngIf="showReject" ion-button small block color="danger">Reject</button>
           </ion-col>
       </ion-row>
       <ion-row>
@@ -43,13 +48,13 @@
       </ion-row>
       <ion-row *ngIf="showRemoteVideo">
           <ion-col>
-              <p>Remote Stream</p>
+              <p>Caller Video</p>
               <div id="remote" style="width:100%;"></div>
           </ion-col>
       </ion-row>
       <ion-row *ngIf="showMyVideo">
           <ion-col>
-              <p>My Stream</p>
+              <p>My Video</p>
               <div id="mini"></div>
           </ion-col>
       </ion-row>

@@ -4,10 +4,13 @@ import { ContactsPage } from './contacts';
 
 @NgModule({
   declarations: [
-    ContactsPage,
+    ContactsPage
   ],
   imports: [
     IonicPageModule.forChild(ContactsPage),
   ],
+  exports: [
+    ContactsPage
+  ]
 })
 export class ContactsPageModule {}
