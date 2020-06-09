@@ -22,9 +22,9 @@
 
   <ion-list radio-group allow-empty-selection="true">
     <ion-item *ngFor="let contact of contactList">
-        <ion-label>{{ contact.FullName }}</ion-label>
-        <ion-label>{{ contact.Mobile }}</ion-label>
-        <ion-radio  value="{{contact.Mobile}}" (ionSelect)="radioSelect($event)"></ion-radio>
+        <ion-label>{{ contact.contactName }}</ion-label>
+        <ion-label>{{ contact.contactPhone }}</ion-label>
+        <ion-radio  value="{{contact.contactPhone}}" (ionSelect)="radioSelect($event)"></ion-radio>
     </ion-item>
  </ion-list>
 

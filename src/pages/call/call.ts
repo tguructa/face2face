@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController,  NavParams,  ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { NativeAudio } from '@ionic-native/native-audio';
-import { ContactsPage } from "../contacts/contacts"
-
+import { Storage } from '@ionic/storage';
+import { AlertController } from 'ionic-angular';
 
 //import "../../assets/apiRTC-latest.min.js";
 /**
@@ -34,26 +34,73 @@ export class CallPage {
   myCallId;
   status;
   calleeId;
- 
+  RegistrationID = "";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private nativeAudio: NativeAudio, public modalController: ModalController) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private nativeAudio: NativeAudio,
+    public modalController: ModalController,
+    private storage: Storage,
+    private alertCtrl: AlertController
+    ) {
+  }
+
+  NoRegistrationIDAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Registration Required!',
+      subTitle: 'Please go to Settings and Register your Phone Number',
+      buttons: ['Dismiss']
+    });
+    alert.present();
   }
 
   async  openModal() {
-    const contactModel =  await this.modalController.create('ContactsPage');
+    const contactModel = await this.modalController.create('ContactsPage');
 
-    contactModel.onDidDismiss(data=>{
+    contactModel.onDidDismiss(data => {
+      
+      this.calleeId = data;
       console.log(data);
-      this.calleeId=data;
-    
+
     });
     return await contactModel.present();
   }
 
+  ionViewWillEnter() {
+    if( this.RegistrationID ==null){
+      this.RegisterUser();
+
+    }
+  
+    console.log('ionViewWillEnter CallPage');
+  }
+
+  GetRegistrationID(){
+    return this.storage.get('RegistrationID');
+
+  }
+
+  RegisterUser(){
+
+    this.GetRegistrationID().then((val) => {
+      this.RegistrationID = val;
+      console.log('RegistrationID', this.RegistrationID);
+      if(this.RegistrationID!=null){
+        this.InitializeApiRTC(this.RegistrationID);
+        }
+        else {
+          this.NoRegistrationIDAlert();
+        }
+    },(err) => { 
+      console.log(err) 
+    })
+
+  }
+
   ionViewDidLoad() {
-
-    this.InitializeApiRTC("9841549605");
-
+   
+    this.RegisterUser();
     this.nativeAudio.preloadComplex('Tone1', 'assets/audio/tone.mp3', 1, 1, 0).then((succ) => {
       console.log("suu", succ)
     }, (err) => {
@@ -76,6 +123,7 @@ export class CallPage {
   }
 
   sessionReadyHandler(e) {
+
     this.myCallId = apiRTC.session.apiCCId;
     this.InitializeControls();
     this.AddEventListeners();
