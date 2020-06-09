@@ -4,6 +4,8 @@ import { NativeAudio } from '@ionic-native/native-audio';
 import { Storage } from '@ionic/storage';
 import { AlertController } from 'ionic-angular';
 
+
+
 //import "../../assets/apiRTC-latest.min.js";
 /**
  * Generated class for the CallPage page.
@@ -20,10 +22,10 @@ declare var apiRTC: any;
 })
 export class CallPage {
 
-  showCall: boolean = true;
-  showHangup: boolean = true;
-  showAnswer: boolean = true;
-  showReject: boolean = true;
+  showCall: boolean;
+  showHangup: boolean;
+  showAnswer: boolean;
+  showReject: boolean;
   showStatus: boolean;
   showRemoteVideo: boolean = true;
   showMyVideo: boolean = true;
@@ -42,7 +44,8 @@ export class CallPage {
     private nativeAudio: NativeAudio,
     public modalController: ModalController,
     private storage: Storage,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    
     ) {
   }
 
