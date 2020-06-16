@@ -22,11 +22,11 @@ declare var apiRTC: any;
 })
 export class CallPage {
 
-  showCall: boolean;
-  showHangup: boolean;
-  showAnswer: boolean;
-  showReject: boolean;
-  showStatus: boolean;
+  showCall:boolean = true;
+  showHangup: boolean= true;
+  showAnswer:boolean = true;
+  showReject: boolean = true;
+  showStatus:boolean = true;
   showRemoteVideo: boolean = true;
   showMyVideo: boolean = true;
 

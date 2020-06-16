@@ -25,17 +25,7 @@ export class ContactsPage {
     public viewCtrl: ViewController,
     private storage: Storage
   ) {
-    /* this.contactList = [{
-      FullName: "Thiru",
-      Mobile: "9841549605",
-      email: " "
-    },
-    {
-      FullName: "Sathish",
-      Mobile: "9840714623",
-      email: " "
-    }
-    ]; */
+   
 
   }
 

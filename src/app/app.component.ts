@@ -12,7 +12,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 export class MyApp {
   rootPage:any = HomePage;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,private androidPermissions: AndroidPermissions) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private androidPermissions: AndroidPermissions) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -27,7 +27,7 @@ export class MyApp {
           androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
           androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE
         ]
-      );
+      ); 
     });
   }
 }

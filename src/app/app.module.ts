@@ -9,6 +9,7 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { MyApp } from './app.component';
 import { HomeModule } from '../pages/home/home.module';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { HomeModule } from '../pages/home/home.module';
     MyApp
   ],
   providers: [
+    AndroidPermissions,
     NativeAudio,
     StatusBar,
     SplashScreen,
