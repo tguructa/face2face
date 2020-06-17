@@ -46,6 +46,10 @@ export class SettingsPage {
   }
 
   SaveContacts(contactName, contactPhone) {
+    if (contactName == null || contactPhone == null){
+      this.settingsAlert("Error - Name and Phone No are required!");
+
+    } else {
     this.GetContacts().then((val) => {
       if (val == null) {
         this.ContactList.push({ "contactName": contactName, "contactPhone": contactPhone });
@@ -62,14 +66,18 @@ export class SettingsPage {
       this.settingsAlert("Contacts saved!");
 
     });
-
+  }
 
   }
 
   SaveRegistrationID(RegistrationID) {
+    if (RegistrationID == null ){
+      this.settingsAlert("Error - Registration ID is required!");
+
+    } else {
     this.storage.set('RegistrationID', RegistrationID);
     this.settingsAlert("Registration ID saved!");
     this.clearContactFields();
   }
-
+  }
 }

@@ -5,7 +5,7 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar color="dark">
+  <ion-navbar color="primary">
     <ion-title>Settings</ion-title>
   </ion-navbar>
 </ion-header>
@@ -16,21 +16,31 @@
     <ion-item>
       <ion-label floating><small>Phone No:</small> </ion-label>
       <ion-input type="text" [(ngModel)]="RegistrationID"></ion-input>
-      
+
     </ion-item>
-    <ion-item><button ion-button color="secondary" block (click)='SaveRegistrationID(RegistrationID)'>Save</button></ion-item>
+    <ion-item>
+      <div text-center>
+        <button ion-button color="warning" round small
+          (click)='SaveRegistrationID(RegistrationID)'>Save</button>
+        </div>
+    </ion-item>
   </ion-item-group>
   <ion-item-group>
     <ion-item-divider color="light"> Add New Contact</ion-item-divider>
     <ion-item>
       <ion-label floating><small>Name:</small> </ion-label>
-      <ion-input type="text" [(ngModel)]="ContactName"></ion-input> 
+      <ion-input type="text" [(ngModel)]="ContactName"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating><small>Phone No:</small> </ion-label>
-      <ion-input type="text" [(ngModel)]="ContactPhone"></ion-input> 
+      <ion-input type="text" [(ngModel)]="ContactPhone"></ion-input>
     </ion-item>
-    <ion-item><button ion-button color="secondary" block (click)='SaveContacts(ContactName, ContactPhone)'>Save</button></ion-item>
+    <ion-item>
+      <div text-center>
+        <button ion-button color="warning" round small
+          (click)='SaveContacts(ContactName, ContactPhone)'>Save</button>
+        </div>
+    </ion-item>
   </ion-item-group>
 
   <ion-item-group>
@@ -38,8 +48,19 @@
     <ion-item>
       <ion-label floating><small>API Key:</small></ion-label>
       <ion-input type="text" [(ngModel)]="apiRTCKey"></ion-input>
-      </ion-item>
-    <ion-item><button ion-button color="secondary" block>Save</button></ion-item>
+    </ion-item>
+    <ion-item>
+      <div text-center>
+        <button ion-button color="warning" round small>Save</button></div>
+    </ion-item>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider color="light">About</ion-item-divider>
+    <ion-item>
+      TBD
+    </ion-item>
+
   </ion-item-group>
 
 </ion-content>
