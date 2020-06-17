@@ -23,7 +23,6 @@ export class MyApp {
         [
           androidPermissions.PERMISSION.CAMERA, 
           androidPermissions.PERMISSION.RECORD_AUDIO, 
-          androidPermissions.PERMISSION.GET_ACCOUNTS, 
           androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
           androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE
         ]
