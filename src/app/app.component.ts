@@ -19,15 +19,53 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
 
-      androidPermissions.requestPermissions(
-        [
-          androidPermissions.PERMISSION.CAMERA, 
-          androidPermissions.PERMISSION.RECORD_AUDIO, 
-          androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE, 
-          androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE
-        ]
-      ); 
-    });
+      
+
+      
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CAMERA).then(
+        result => console.log('Has permission for camera?',result.hasPermission),
+        err => {
+          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA);
+      
+        }
+      );
+
+              
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO).then(
+        result => console.log('Has permission for mic?',result.hasPermission),
+        err =>{ 
+          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.RECORD_AUDIO);
+       
+        }
+      );
+
+              
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.RECORD_VIDEO).then(
+        result => console.log('Has permission for video?',result.hasPermission),
+        err =>{ 
+          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.RECORD_VIDEO);
+                     
+        }
+      );
+
+              
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE).then(
+        result => console.log('Has permission for mic?',result.hasPermission),
+        err =>{ 
+          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE);
+                     
+        }
+      );
+
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
+        result => console.log('Has permission for mic?',result.hasPermission),
+        err =>{ 
+          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE);
+                     
+        }
+      );
+     
+    }); 
   }
 }
 

@@ -1,4 +1,24 @@
-<ion-tabs>
-  <ion-tab [root]="tab1Root" tabTitle="Call" tabIcon="call"></ion-tab>
-  <ion-tab [root]="tab2Root" tabTitle="Settings" tabIcon="cog"></ion-tab>
-</ion-tabs>
+<ion-header>
+  <ion-navbar color="primary">
+      <ion-title>
+          face2face
+      </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+ <ion-list>
+  <ion-item>
+    <ion-label floating><small>Register Your Phone No:</small> </ion-label>
+    <ion-input type="number" [(ngModel)]="RegistrationID"></ion-input>
+
+  </ion-item>
+  <ion-item>
+    <div text-center>
+      <button ion-button color="warning" round block
+        (click)='SaveRegistrationID(RegistrationID)'>Save</button>
+      </div>
+  </ion-item>
+  </ion-list> 
+</ion-content>

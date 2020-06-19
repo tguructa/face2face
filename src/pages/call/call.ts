@@ -6,6 +6,7 @@ import { AlertController } from 'ionic-angular';
 
 
 
+
 //import "../../assets/apiRTC-latest.min.js";
 /**
  * Generated class for the CallPage page.
@@ -23,10 +24,10 @@ declare var apiRTC: any;
 export class CallPage {
 
   showCall:boolean = true;
-  showHangup: boolean= true;
-  showAnswer:boolean = true;
-  showReject: boolean = true;
-  showStatus:boolean = true;
+  showHangup: boolean;
+  showAnswer:boolean;
+  showReject: boolean;
+  showStatus:boolean ;
   showRemoteVideo: boolean = true;
   showMyVideo: boolean = true;
 
@@ -37,6 +38,7 @@ export class CallPage {
   status;
   calleeId;
   RegistrationID = "";
+  isRegistered:boolean=false;
 
   constructor(
     public navCtrl: NavController,
@@ -45,8 +47,15 @@ export class CallPage {
     public modalController: ModalController,
     private storage: Storage,
     private alertCtrl: AlertController,
+   
     
     ) {
+      this.nativeAudio.preloadComplex('uniqueI1', 'assets/audio/tone.mp3', 1, 1, 0).then((succ)=>{
+        console.log("suu",succ)
+      }, (err)=>{
+        console.log("err",err)
+      });
+ 
   }
 
   NoRegistrationIDAlert() {
@@ -71,12 +80,20 @@ export class CallPage {
   }
 
   ionViewWillEnter() {
-    if( this.RegistrationID ==null){
+    if( this.isRegistered==false && this.RegistrationID !=null){
       this.RegisterUser();
-
+    
     }
   
     console.log('ionViewWillEnter CallPage');
+  }
+
+  ionViewDidLoad() {
+   
+    if( this.isRegistered==false && this.RegistrationID !=null){
+      this.RegisterUser();
+    }
+    console.log('ionViewDidLoad CallPage');
   }
 
   GetRegistrationID(){
@@ -89,29 +106,15 @@ export class CallPage {
     this.GetRegistrationID().then((val) => {
       this.RegistrationID = val;
       console.log('RegistrationID', this.RegistrationID);
-      if(this.RegistrationID!=null){
         this.InitializeApiRTC(this.RegistrationID);
-        }
-        else {
-          this.NoRegistrationIDAlert();
-        }
+        this.isRegistered=true;
     },(err) => { 
       console.log(err) 
     })
 
   }
 
-  ionViewDidLoad() {
-   
-    this.RegisterUser();
-    this.nativeAudio.preloadComplex('Tone1', 'assets/audio/tone.mp3', 1, 1, 0).then((succ) => {
-      console.log("suu", succ)
-    }, (err) => {
-      console.log("err", err)
-    });
-
-    console.log('ionViewDidLoad CallPage');
-  }
+ 
 
   InitializeApiRTC(papiCCId) {
 
@@ -154,6 +157,7 @@ export class CallPage {
     this.showAnswer = true;
     this.showReject = true;
     this.showHangup = true;
+
     this.nativeAudio.loop('uniqueI1').then((succ) => {
       console.log("succ", succ)
     }, (err) => {
