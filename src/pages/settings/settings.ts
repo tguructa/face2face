@@ -72,11 +72,11 @@ export class SettingsPage {
 
   SaveRegistrationID(RegistrationID) {
     if (RegistrationID == null ){
-      this.settingsAlert("Error - Registration ID is required!");
+      this.settingsAlert("Error - Phone No is required!");
 
     } else {
     this.storage.set('RegistrationID', RegistrationID);
-    this.settingsAlert("Registration ID saved!");
+    this.settingsAlert("Registration ID saved!. Please restart the app to use the new ID");
     this.clearContactFields();
   }
   }

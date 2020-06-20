@@ -2,12 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { NativeAudio } from '@ionic-native/native-audio';
 import { Storage } from '@ionic/storage';
-import { AlertController } from 'ionic-angular';
+import { Platform } from 'ionic-angular';
 
-
-
-
-//import "../../assets/apiRTC-latest.min.js";
 /**
  * Generated class for the CallPage page.
  *
@@ -46,26 +42,22 @@ export class CallPage {
     private nativeAudio: NativeAudio,
     public modalController: ModalController,
     private storage: Storage,
-    private alertCtrl: AlertController,
-   
+    public  platform: Platform
     
     ) {
-      this.nativeAudio.preloadComplex('uniqueI1', 'assets/audio/tone.mp3', 1, 1, 0).then((succ)=>{
-        console.log("suu",succ)
-      }, (err)=>{
-        console.log("err",err)
-      });
+      
+
+      this.RegisterUser();
+
  
   }
 
-  NoRegistrationIDAlert() {
-    let alert = this.alertCtrl.create({
-      title: 'Registration Required!',
-      subTitle: 'Please go to Settings and Register your Phone Number',
-      buttons: ['Dismiss']
+  ionViewDidLoad() {
+    this.platform.ready().then(() => {	
+      this.Ringtone("LOAD");
     });
-    alert.present();
   }
+
 
   async  openModal() {
     const contactModel = await this.modalController.create('ContactsPage');
@@ -79,23 +71,7 @@ export class CallPage {
     return await contactModel.present();
   }
 
-  ionViewWillEnter() {
-    if( this.isRegistered==false && this.RegistrationID !=null){
-      this.RegisterUser();
-    
-    }
-  
-    console.log('ionViewWillEnter CallPage');
-  }
-
-  ionViewDidLoad() {
-   
-    if( this.isRegistered==false && this.RegistrationID !=null){
-      this.RegisterUser();
-    }
-    console.log('ionViewDidLoad CallPage');
-  }
-
+ 
   GetRegistrationID(){
     return this.storage.get('RegistrationID');
 
@@ -158,11 +134,7 @@ export class CallPage {
     this.showReject = true;
     this.showHangup = true;
 
-    this.nativeAudio.loop('uniqueI1').then((succ) => {
-      console.log("succ", succ)
-    }, (err) => {
-      console.log("err", err)
-    });
+    this.Ringtone("INCOMING");
 
   }
 
@@ -276,23 +248,44 @@ export class CallPage {
 
   HangUp() {
     this.webRTCClient.hangUp(this.incomingCallId);
+    this.Ringtone("STOP");
   }
 
   AnswerCall(incomingCallId) {
     this.webRTCClient.acceptCall(incomingCallId);
-    this.nativeAudio.stop('uniqueI1').then(() => { }, () => { });
+   this.Ringtone("STOP");
 
     this.UpdateControlsOnAnswer();
   }
 
   RejectCall(incomingCallId) {
     this.webRTCClient.refuseCall(incomingCallId);
+    this.Ringtone("STOP");
     this.UpdateControlsOnReject();
     this.RemoveMediaElements(incomingCallId);
   }
 
+  Ringtone(state) {
 
+    if (state == "LOAD") {
 
+      this.nativeAudio.preloadComplex('uniqueI1', 'assets/audio/tone.mp3', 1, 1, 0).then((succ) => {
+        console.log("suu", succ)
+      }, (err) => {
+        console.log("err", err)
+      });
+    } else if (state == "INCOMING") {
 
+      this.nativeAudio.loop('uniqueI1').then((succ) => {
+        console.log("succ", succ)
+      }, (err) => {
+        console.log("err", err)
+      });
+    } else if (state == "STOP") {
+
+      this.nativeAudio.stop('uniqueI1').then(() => { }, () => { });
+    }
+
+  }
 
 }
