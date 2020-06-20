@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { AlertController } from 'ionic-angular';
 /**
@@ -20,16 +20,11 @@ export class SettingsPage {
   ContactList = [];
   ContactName;
   ContactPhone;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private alertCtrl: AlertController) {
-  }
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private alertCtrl: AlertController) {}
 
   clearContactFields() {
     this.ContactName = "";
     this.ContactPhone = "";
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SettingsPage');
   }
 
   settingsAlert(alertMessage) {
@@ -46,38 +41,47 @@ export class SettingsPage {
   }
 
   SaveContacts(contactName, contactPhone) {
-    if (contactName == null || contactPhone == null){
+    if (contactName == null || contactPhone == null) {
       this.settingsAlert("Error - Name and Phone No are required!");
-
     } else {
-    this.GetContacts().then((val) => {
-      if (val == null) {
-        this.ContactList.push({ "contactName": contactName, "contactPhone": contactPhone });
-        console.log('GetContacts ' + val);
-        console.log({ "contactName": contactName, "contactPhone": contactPhone });
-        this.storage.set('Contacts', this.ContactList);
-      }
-      else {
-        this.ContactList = val;
-        console.log('GetContacts in' + val);
-        this.ContactList.push({ "contactName": contactName, "contactPhone": contactPhone });
-        this.storage.set('Contacts', this.ContactList);
-      };
-      this.settingsAlert("Contacts saved!");
-
-    });
-  }
-
+      this.GetContacts().then((val) => {
+        if (val == null) {
+          this.ContactList.push({
+            "contactName": contactName,
+            "contactPhone": contactPhone
+          });
+          this.storage.set('Contacts', this.ContactList);
+        } else {
+          this.ContactList = val;
+          this.ContactList.push({
+            "contactName": contactName,
+            "contactPhone": contactPhone
+          });
+          this.storage.set('Contacts', this.ContactList);
+        };
+        this.settingsAlert("Contacts saved!");
+      });
+    }
   }
 
   SaveRegistrationID(RegistrationID) {
-    if (RegistrationID == null ){
+    if (RegistrationID == null) {
       this.settingsAlert("Error - Phone No is required!");
-
     } else {
-    this.storage.set('RegistrationID', RegistrationID);
-    this.settingsAlert("Registration ID saved!. Please restart the app to use the new ID");
-    this.clearContactFields();
+      this.storage.set('RegistrationID', RegistrationID);
+      this.settingsAlert("Registration ID saved!. Please restart the app to use the new ID");
+      this.clearContactFields();
+    }
   }
+
+  SaveapiRTCKey(apiRTCKey) {
+    if (apiRTCKey == null) {
+      this.settingsAlert("Error - apiRTCKey is required!");
+    } else {
+      this.storage.set('apiRTCKey', apiRTCKey);
+      this.settingsAlert("apiRTCKey saved!. Please restart the app to use the new apiRTC Key");
+      this.clearContactFields();
+    }
   }
+
 }

@@ -11,54 +11,52 @@
 </ion-header>
 
 <ion-content>
-  <ion-item-group>
-    <ion-item-divider color="light"> Register Your Phone No</ion-item-divider>
-    <ion-item>
+  <ion-item-group  >
+    <ion-item-divider color="primary" no-lines > Change Your Phone No</ion-item-divider>
+    <ion-item >
       <ion-label floating><small>Phone No:</small> </ion-label>
-      <ion-input type="number" [(ngModel)]="RegistrationID"></ion-input>
+      <ion-input type="number" [(ngModel)]="RegistrationID" value={{RegistrationID}} clearInput></ion-input>
 
     </ion-item>
     <ion-item>
       <div text-center>
-        <button ion-button color="warning" round block
-          (click)='SaveRegistrationID(RegistrationID)'>Save</button>
-        </div>
+        <button ion-button color="secondary" round block (click)='SaveRegistrationID(RegistrationID)'>Save</button>
+      </div>
     </ion-item>
   </ion-item-group>
   <ion-item-group>
-    <ion-item-divider color="light"> Add New Contact</ion-item-divider>
+    <ion-item-divider color="primary" no-lines > Add New Contact</ion-item-divider>
     <ion-item>
       <ion-label floating><small>Name:</small> </ion-label>
-      <ion-input type="text" [(ngModel)]="ContactName"></ion-input>
+      <ion-input type="text" [(ngModel)]="ContactName" clearInput></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating><small>Phone No:</small> </ion-label>
-      <ion-input type="number" [(ngModel)]="ContactPhone"></ion-input>
+      <ion-input type="number" [(ngModel)]="ContactPhone" clearInput></ion-input>
     </ion-item>
     <ion-item>
       <div text-center>
-        <button ion-button color="warning" round block
-          (click)='SaveContacts(ContactName, ContactPhone)'>Save</button>
-        </div>
+        <button ion-button color="secondary" round block (click)='SaveContacts(ContactName, ContactPhone)'>Save</button>
+      </div>
     </ion-item>
   </ion-item-group>
 
   <ion-item-group>
-    <ion-item-divider color="light">apiRTC Configuration</ion-item-divider>
+    <ion-item-divider color="primary" no-lines >apiRTC Configuration</ion-item-divider>
     <ion-item>
       <ion-label floating><small>API Key:</small></ion-label>
       <ion-input type="text" [(ngModel)]="apiRTCKey"></ion-input>
     </ion-item>
     <ion-item>
       <div text-center>
-        <button ion-button color="warning" round block>Save</button></div>
+        <button ion-button color="secondary" round block (click)='SaveapiRTCKey(apiRTCKey)'>Save</button></div>
     </ion-item>
   </ion-item-group>
 
   <ion-item-group>
-    <ion-item-divider color="light">About</ion-item-divider>
+    <ion-item-divider color="primary">About</ion-item-divider>
     <ion-item>
-      TBD
+      face2face v1.1 
     </ion-item>
 
   </ion-item-group>

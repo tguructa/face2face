@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angu
 import { NativeAudio } from '@ionic-native/native-audio';
 import { Storage } from '@ionic/storage';
 import { Platform } from 'ionic-angular';
-
+import { AlertController } from 'ionic-angular';
 /**
  * Generated class for the CallPage page.
  *
@@ -18,15 +18,15 @@ declare var apiRTC: any;
   templateUrl: 'call.html',
 })
 export class CallPage {
-
-  showCall:boolean = true;
+  showCall: boolean = true;
   showHangup: boolean;
-  showAnswer:boolean;
+  showAnswer: boolean;
   showReject: boolean;
-  showStatus:boolean ;
+  showStatus: boolean;
   showRemoteVideo: boolean = true;
   showMyVideo: boolean = true;
 
+  apiRTCKey="b1c7afd3d2f5a7c7ffc1dda28e0d352a";
   session;
   webRTCClient;
   incomingCallId = 0;
@@ -34,7 +34,7 @@ export class CallPage {
   status;
   calleeId;
   RegistrationID = "";
-  isRegistered:boolean=false;
+  isRegistered: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -42,70 +42,63 @@ export class CallPage {
     private nativeAudio: NativeAudio,
     public modalController: ModalController,
     private storage: Storage,
-    public  platform: Platform
-    
-    ) {
-      
+    public platform: Platform,
+    private alertCtrl: AlertController
 
-      this.RegisterUser();
-
- 
+  ) {
+    this.RegisterUser();
   }
 
   ionViewDidLoad() {
-    this.platform.ready().then(() => {	
+    this.platform.ready().then(() => {
       this.Ringtone("LOAD");
     });
   }
 
+  CallAlert(alertMessage) {
+    let alert = this.alertCtrl.create({
+      title: 'Call',
+      subTitle: alertMessage,
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
 
-  async  openModal() {
+  async openModal() {
     const contactModel = await this.modalController.create('ContactsPage');
-
     contactModel.onDidDismiss(data => {
-      
       this.calleeId = data;
       console.log(data);
-
     });
     return await contactModel.present();
   }
 
- 
-  GetRegistrationID(){
+  GetRegistrationID() {
     return this.storage.get('RegistrationID');
-
   }
 
-  RegisterUser(){
-
+  RegisterUser() {
     this.GetRegistrationID().then((val) => {
       this.RegistrationID = val;
       console.log('RegistrationID', this.RegistrationID);
-        this.InitializeApiRTC(this.RegistrationID);
-        this.isRegistered=true;
-    },(err) => { 
-      console.log(err) 
+      this.InitializeApiRTC(this.RegistrationID);
+      this.isRegistered = true;
+    }, (err) => {
+      console.log(err)
     })
-
   }
 
- 
-
   InitializeApiRTC(papiCCId) {
-
     apiRTC.init({
-      apiKey: "b1c7afd3d2f5a7c7ffc1dda28e0d352a",
+      apiKey: this.apiRTCKey,
       apiCCId: papiCCId,
       onReady: (e) => {
         this.sessionReadyHandler(e);
       }
     });
-
   }
 
   sessionReadyHandler(e) {
-
     this.myCallId = apiRTC.session.apiCCId;
     this.InitializeControls();
     this.AddEventListeners();
@@ -133,9 +126,7 @@ export class CallPage {
     this.showAnswer = true;
     this.showReject = true;
     this.showHangup = true;
-
     this.Ringtone("INCOMING");
-
   }
 
   InitializeControlsForHangup() {
@@ -167,22 +158,18 @@ export class CallPage {
   AddStreamInDiv(stream, callType, divId, mediaEltId, style, muted) {
     let mediaElt = null;
     let divElement = null;
-
     if (callType === 'audio') {
       mediaElt = document.createElement("audio");
     } else {
       mediaElt = document.createElement("video");
     }
-
     mediaElt.id = mediaEltId;
     mediaElt.autoplay = true;
     mediaElt.muted = muted;
     mediaElt.style.width = style.width;
     mediaElt.style.height = style.height;
-
     divElement = document.getElementById(divId);
     divElement.appendChild(mediaElt);
-
     this.webRTCClient.attachMediaStream(mediaElt, stream);
   }
 
@@ -190,18 +177,21 @@ export class CallPage {
     apiRTC.addEventListener("userMediaSuccess", (e) => {
       this.showStatus = true;
       this.showMyVideo = true;
-
-      this.webRTCClient.addStreamInDiv(e.detail.stream, e.detail.callType, "mini", 'miniElt-' + e.detail.callId, {
-        width: "128px",
-        height: "96px"
-      }, true);
+      this.webRTCClient.addStreamInDiv(
+        e.detail.stream,
+        e.detail.callType,
+        "mini",
+        'miniElt-' + e.detail.callId, {
+          width: "128px",
+          height: "96px"
+        }, true);
 
     });
 
     apiRTC.addEventListener("userMediaError", (e) => {
       this.InitializeControlsForHangup();
-
-      this.status = this.status + "<br/> The following error has occurred <br/> " + e;
+      this.CallAlert("An error has occurred: " + e);
+     // this.status = this.status + "<br/> The following error has occurred <br/> " + e;
     });
 
     apiRTC.addEventListener("incomingCall", (e) => {
@@ -213,7 +203,7 @@ export class CallPage {
       if (e.detail.lastEstablishedCall === true) {
         this.InitializeControlsForHangup();
       }
-      this.status = this.status + "<br/> The call has been hunged up due to the following reasons <br/> " + e.detail.reason;
+     // this.status = this.status + "<br/> The call has been hunged up due to the following reasons <br/> " + e.detail.reason;
       this.RemoveMediaElements(e.detail.callId);
     });
 
@@ -229,13 +219,7 @@ export class CallPage {
       this.webRTCClient.setAllowMultipleCalls(true);
       this.webRTCClient.setVideoBandwidth(300);
       this.webRTCClient.setUserAcceptOnIncomingCall(true);
-
-      /*      this.InitializeControls();
-            this.AddEventListeners();*/
-
-      //this.MakeCall("729278");
     });
-
   }
 
   MakeCall(calleeId) {
@@ -253,8 +237,7 @@ export class CallPage {
 
   AnswerCall(incomingCallId) {
     this.webRTCClient.acceptCall(incomingCallId);
-   this.Ringtone("STOP");
-
+    this.Ringtone("STOP");
     this.UpdateControlsOnAnswer();
   }
 
@@ -266,26 +249,20 @@ export class CallPage {
   }
 
   Ringtone(state) {
-
     if (state == "LOAD") {
-
       this.nativeAudio.preloadComplex('uniqueI1', 'assets/audio/tone.mp3', 1, 1, 0).then((succ) => {
         console.log("suu", succ)
       }, (err) => {
         console.log("err", err)
       });
     } else if (state == "INCOMING") {
-
       this.nativeAudio.loop('uniqueI1').then((succ) => {
         console.log("succ", succ)
       }, (err) => {
         console.log("err", err)
       });
     } else if (state == "STOP") {
-
-      this.nativeAudio.stop('uniqueI1').then(() => { }, () => { });
+      this.nativeAudio.stop('uniqueI1').then(() => {}, () => {});
     }
-
   }
-
 }
