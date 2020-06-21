@@ -32,10 +32,13 @@ export class HomePage {
     }
 
     SaveRegistrationID(RegistrationID) {
+      if(RegistrationID==null){
+         this.settingsAlert("Phone No is required!");
+      } else{
       this.storage.set('RegistrationID', RegistrationID);
     //  this.settingsAlert("Registration ID saved!");
       this.navCtrl.push('page-tabhome');
-
+      }
   
     }
 

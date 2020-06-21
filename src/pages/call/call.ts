@@ -46,12 +46,14 @@ export class CallPage {
     private alertCtrl: AlertController
 
   ) {
-    this.RegisterUser();
+   
   }
 
   ionViewDidLoad() {
+   // this.TestControls();
     this.platform.ready().then(() => {
       this.Ringtone("LOAD");
+      this.RegisterUser();
     });
   }
 
@@ -112,6 +114,13 @@ export class CallPage {
     /*    this.webRTCClient.setAllowMultipleCalls(true);
         this.webRTCClient.setVideoBandwidth(300);
         this.webRTCClient.setUserAcceptOnIncomingCall(true);*/
+  }
+
+  TestControls() {
+    this.showCall = true;
+    this.showAnswer = true;
+    this.showHangup = true;
+    this.showReject = true;
   }
 
   InitializeControls() {

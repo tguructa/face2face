@@ -16,7 +16,7 @@
 
  <ion-list>
       <ion-item>
-          <ion-label floating><small>Caller ID:</small></ion-label>
+          <ion-label floating>Caller Phone No</ion-label>
           <ion-input type="number" [(ngModel)]="calleeId" clearInput></ion-input>
           <button  ion-button  color="secondary" round small (click)='openModal()' item-end>Contacts</button>
       </ion-item>
@@ -25,18 +25,18 @@
   <ion-grid>
       <ion-row>
           <ion-col>
-              <button *ngIf="showCall"  ion-button color="light-blue" round block (click)='MakeCall(calleeId)'>Call</button>
+              <button *ngIf="showCall"  ion-button color="light-blue" round block small (click)='MakeCall(calleeId)'>Call</button>
           </ion-col>
           <ion-col>
-              <button *ngIf="showHangup" ion-button round block color="light-red" (click)='HangUp()'>Hangup</button>
+              <button *ngIf="showHangup" ion-button round block small color="light-red" (click)='HangUp()'>Hangup</button>
           </ion-col>
       </ion-row>
       <ion-row>
           <ion-col>
-              <button *ngIf="showAnswer" ion-button round block color="light-green" (click)='AnswerCall(incomingCallId)'>Answer</button>
+              <button *ngIf="showAnswer" ion-button round block small color="light-green" (click)='AnswerCall(incomingCallId)'>Answer</button>
           </ion-col>
           <ion-col>
-              <button *ngIf="showReject" ion-button round block color="light-red">Reject</button>
+              <button *ngIf="showReject" ion-button round block small color="light-red">Reject</button>
           </ion-col>
       </ion-row>
 <!--       <ion-row>

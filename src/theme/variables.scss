@@ -64,7 +64,9 @@ $colors: (
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
-$button-md-height:50px;
+$alert-md-background-color : color($colors, secondary);
+//$alert-md-button-text-color : #fff;
+
 //$list-md-border-color: color($colors, dark);
 
 // App Windows Variables

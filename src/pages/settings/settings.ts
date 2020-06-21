@@ -20,7 +20,13 @@ export class SettingsPage {
   ContactList = [];
   ContactName;
   ContactPhone;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private alertCtrl: AlertController) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private alertCtrl: AlertController) {
+    this.GetRegistrationID().then((val) => {
+      if (val != null) {
+        this.RegistrationID=val;
+      } 
+    });
+  }
 
   clearContactFields() {
     this.ContactName = "";
@@ -38,6 +44,10 @@ export class SettingsPage {
 
   GetContacts() {
     return this.storage.get('Contacts');
+  }
+
+  GetRegistrationID() {
+    return this.storage.get('RegistrationID');
   }
 
   SaveContacts(contactName, contactPhone) {
