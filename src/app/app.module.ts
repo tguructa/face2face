@@ -10,6 +10,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { HomeModule } from '../pages/home/home.module';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { ContactsProvider } from '../providers/contacts/contacts';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
     NativeAudio,
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ContactsProvider
   ]
 })
 export class AppModule {}

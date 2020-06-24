@@ -80,7 +80,7 @@ export class SettingsPage {
     } else {
       this.storage.set('RegistrationID', RegistrationID);
       this.settingsAlert("Registration ID saved!. Please restart the app to use the new ID");
-      this.clearContactFields();
+    //  this.clearContactFields();
     }
   }
 

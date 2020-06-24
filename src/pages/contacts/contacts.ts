@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, Platform } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { Contact } from '../../model/contact';
+
+import { ContactsProvider } from '../../providers/contacts/contacts'
 /**
  * Generated class for the ContactsPage page.
  *
@@ -19,16 +22,27 @@ export class ContactsPage {
   contactList=[];
   selectedRadioItem;
 
+  contacts: Contact[];
+
   constructor(
     public platform: Platform,
     public params: NavParams,
     public viewCtrl: ViewController,
-    private storage: Storage
+    private storage: Storage,
+    private contactProvider: ContactsProvider
   ) {
    
+    this.storage.get('Contacts').then((val)=>{
+      this.contactList=val;
+      console.log(val);
 
+    })
   }
 
+  ionViewDidLoad() {
+    this.getContacts();
+    console.log('ionViewDidLoad ContactsPage');
+  }
   radioSelect(value) {
     console.log("radioSelect",value);
     this.selectedRadioItem = value;
@@ -37,20 +51,10 @@ export class ContactsPage {
 
   dismiss() {
     this.viewCtrl.dismiss(this.selectedRadioItem);
-
-  }
-  ionViewWillEnter(){
-    this.storage.get('Contacts').then((val)=>{
-      this.contactList=val;
-      console.log(val);
-
-    })
-  }
-  ionViewDidLoad() {
-   
-
-
-    console.log('ionViewDidLoad ContactsPage');
   }
 
+  getContacts(): void {
+    this.contactProvider.getContacts()
+    .subscribe(contacts => this.contacts = contacts);
+  }
 }
