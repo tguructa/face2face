@@ -23,6 +23,8 @@ export class ContactsPage {
   selectedRadioItem;
 
   contacts: Contact[];
+  contact: Contact;
+ 
 
   constructor(
     public platform: Platform,
@@ -45,16 +47,18 @@ export class ContactsPage {
   }
   radioSelect(value) {
     console.log("radioSelect",value);
-    this.selectedRadioItem = value;
-    this.dismiss();
+    this.contact=value;
+      this.dismiss();
   }
 
   dismiss() {
-    this.viewCtrl.dismiss(this.selectedRadioItem);
+    this.viewCtrl.dismiss( this.contact);
   }
 
   getContacts(): void {
     this.contactProvider.getContacts()
-    .subscribe(contacts => this.contacts = contacts);
+    .subscribe(contacts => {
+      this.contacts = contacts
+    });
   }
 }

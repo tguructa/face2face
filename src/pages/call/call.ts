@@ -4,6 +4,8 @@ import { NativeAudio } from '@ionic-native/native-audio';
 import { Storage } from '@ionic/storage';
 import { Platform } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
+import { Contact } from '../../model/contact';
+import { Base64 } from 'base64-string';
 /**
  * Generated class for the CallPage page.
  *
@@ -33,9 +35,11 @@ export class CallPage {
   myCallId;
   status;
   calleeId;
+  calleeName;
   RegistrationID = "";
   isRegistered: boolean = false;
-
+  contact: Contact;
+  enc = new Base64();
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -69,8 +73,9 @@ export class CallPage {
   async openModal() {
     const contactModel = await this.modalController.create('ContactsPage');
     contactModel.onDidDismiss(data => {
-      this.calleeId = data;
-      console.log(data);
+      this.calleeName= data.cname
+      this.calleeId =this.enc.decode(data.cnumber);
+      console.log(this.calleeId);
     });
     return await contactModel.present();
   }
@@ -232,11 +237,16 @@ export class CallPage {
   }
 
   MakeCall(calleeId) {
+    if(calleeId==null){
+      this.CallAlert("Please select or type a Contact!") 
+    }
+    else{
     var callId = this.webRTCClient.call(calleeId);
     if (callId != null) {
       this.incomingCallId = callId;
       this.showHangup = true;
     }
+  }
   }
 
   HangUp() {
