@@ -24,7 +24,7 @@ export class ContactsPage {
 
   contacts: Contact[];
   contact: Contact;
- 
+  show = true;  
 
   constructor(
     public platform: Platform,
@@ -59,6 +59,7 @@ export class ContactsPage {
     this.contactProvider.getContacts()
     .subscribe(contacts => {
       this.contacts = contacts
+      this.show = false;  
     });
   }
 }

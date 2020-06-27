@@ -19,7 +19,7 @@
 </ion-header>
 
 <ion-content padding>
-
+  <ion-spinner *ngIf="show"></ion-spinner>  
   <ion-list radio-group allow-empty-selection="true">
     <ion-item *ngFor="let contact of contacts">
         <ion-label>{{ contact.cname }}</ion-label>
